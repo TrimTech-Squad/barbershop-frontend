@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 // import logo from './logo.svg';
 import "./App.css";
-import { Login } from "./Login";
+import { Login } from "./page/login/Login";
 import { Route, Routes } from "react-router-dom";
-import { Register } from "./Register";
+import { Register } from "./page/register/Register";
 
 function App() {
   return (
