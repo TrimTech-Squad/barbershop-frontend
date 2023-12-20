@@ -1,14 +1,22 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
-export async function fetchApi(options: AxiosRequestConfig) {
+export default async function fetchApi(
+  url: string,
+  method: "GET" | "POST" | "PUT" | "DELETE",
+  data?: Record<string, unknown>,
+  config?: AxiosRequestConfig
+) {
+  console.log(import.meta.env.VITE_BASE_API_URL);
   try {
     const res = await axios({
-      method: options.method,
-      url: import.meta.env.BASE_API_URL + options.url,
-      data: JSON.stringify(options.data),
+      method: method,
+      url: import.meta.env.VITE_BASE_API_URL + url,
+      data: JSON.stringify(data),
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },
+      ...config,
     });
     return res.data;
   } catch (err) {
