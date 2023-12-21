@@ -7,11 +7,13 @@ import Auth from "./hooks/auth";
 import AdminLayout from "./layout/admin";
 import Dashboard from "./page/admin/dashboard";
 import { Service } from "./page/admin/service";
+import LandingPage from "./page/landingpage";
 
 function App() {
   return (
     <Auth>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminLayout />}>

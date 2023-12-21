@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import fetchAPI from "../../helper/fetch";
 import AuthContext from "../../context/auth";
-import "./style.css";
 import Toast from "../../component/toast";
 
 export const Login = () => {

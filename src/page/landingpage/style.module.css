@@ -78,13 +78,22 @@ nav a:focus {
 
 /*home*/
 
+.home {
+  background-image: url(/img/bg3.jpg);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+
 .overlay {
-  position: absolute;
-  height: 100%;
+  /* position: absolute; */
+  height: 100vh;
   width: 100%;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.65);
+
   color: white;
   display: flex;
   align-items: center;
