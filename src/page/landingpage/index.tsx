@@ -1,12 +1,51 @@
 import { Link } from "react-router-dom";
 import LandingPageCss from "./style.module.css";
+import { useState, useEffect, useContext } from "react";
+import fetchApi from "../../helper/fetch";
+import AuthContext from "../../context/auth";
+import { Avatar, Typography } from "@mui/material";
+
+export type Service = {
+  id: number;
+  serviceName: string;
+  description: string;
+  photo_url: string;
+};
+
+export type Kapster = {
+  id: number;
+  name: string;
+  specialization: string;
+  gender: "Man" | "Woman";
+  photo_url: string;
+  status: "Available" | "Not Available" | "Resigned";
+};
 
 export default function LandingPage() {
+  const [services, setServices] = useState<Service[]>([]);
+  const [kapsters, setKapsters] = useState<Kapster[]>([]);
+
+  const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      const response = await fetchApi("/services", "GET");
+      setServices(response.data);
+    };
+    fetchServices();
+    const fetchKapsters = async () => {
+      const response = await fetchApi("/kapsters", "GET");
+      setKapsters(response.data);
+    };
+    fetchKapsters();
+  }, []);
+
   return (
     <>
       <header>
         <div
           className={`${LandingPageCss["container"]} ${LandingPageCss["container-nav"]} `}
+          style={{ alignItems: "center" }}
         >
           <div className={LandingPageCss["logo"]}>
             <img src="img/logo.png" alt="" />
@@ -31,12 +70,28 @@ export default function LandingPage() {
               <li>
                 <a href="#contact">Contact</a>
               </li>
-              <div>
-                <Link to="/login">
-                  <button className={LandingPageCss["button-lgn"]}>
-                    Login
-                  </button>{" "}
-                </Link>
+              <div
+                style={{
+                  marginLeft: "2rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem",
+                }}
+              >
+                {authContext.user ? (
+                  <>
+                    <Avatar src={authContext.user.photo_url} />
+                    <Typography fontWeight="bold">
+                      {authContext.user.name}
+                    </Typography>
+                  </>
+                ) : (
+                  <Link to="/login">
+                    <button className={LandingPageCss["button-lgn"]}>
+                      Login
+                    </button>{" "}
+                  </Link>
+                )}
               </div>
             </ul>
           </nav>
@@ -89,83 +144,50 @@ export default function LandingPage() {
           </div>
 
           <div className={LandingPageCss["service-item"]}>
-            <div className={LandingPageCss["service-cut"]}>
-              <div className={LandingPageCss["image-service"]}>
-                <img src="img/service/scissor.png" alt="" />
+            {services.map((item) => (
+              <div key={item.id} className={LandingPageCss["service-cut"]}>
+                <div className={LandingPageCss["image-service"]}>
+                  <img
+                    src={
+                      import.meta.env.VITE_BASE_API_STATIC_URL + item.photo_url
+                    }
+                    alt=""
+                  />
+                </div>
+                <h3>{item.serviceName}</h3>
+                <p>{item.description}</p>
               </div>
-              <h3>Hair Cut</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Accusantium vitae harum placeat sint culpa nisi, fugiat sed quos
-                optio quam mollitia deserunt ab blanditiis velit vel
-                necessitatibus! Reiciendis, repellat maxime.
-              </p>
-            </div>
-
-            <div className={LandingPageCss["service-cut"]}>
-              <div className={LandingPageCss["image-service"]}>
-                <img src="img/service/barber.png" alt="" />
-              </div>
-              <h3>Massage</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Accusantium vitae harum placeat sint culpa nisi, fugiat sed quos
-                optio quam mollitia deserunt ab blanditiis velit vel
-                necessitatibus! Reiciendis, repellat maxime.
-              </p>
-            </div>
-
-            <div className={LandingPageCss["service-cut"]}>
-              <div className={LandingPageCss["image-service"]}>
-                <img src="img/service/razor.png" alt="" />
-              </div>
-              <h3>Razor Cut</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Accusantium vitae harum placeat sint culpa nisi, fugiat sed quos
-                optio quam mollitia deserunt ab blanditiis velit vel
-                necessitatibus! Reiciendis, repellat maxime.
-              </p>
-            </div>
-
-            <div className={LandingPageCss["service-cut"]}>
-              <div className={LandingPageCss["image-service"]}>
-                <img src="img/service/hairstyle.png" alt="" />
-              </div>
-              <h3>Hairstyle</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Accusantium vitae harum placeat sint culpa nisi, fugiat sed quos
-                optio quam mollitia deserunt ab blanditiis velit vel
-                necessitatibus! Reiciendis, repellat maxime.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
 
         <div className={LandingPageCss["kapster"]} id="kapster">
           <div className={LandingPageCss["kaps-text"]}>
-            <h2>OUR KAPSTER</h2>
+            <h2>OUR KAPSTERS</h2>
           </div>
 
           <div className={LandingPageCss["kaps-item"]}>
-            <div className={LandingPageCss["kaps-container"]}>
-              <div className={LandingPageCss["kaps-image"]}>
-                <img src="img/kapster/1.jpg" alt="" />
+            {kapsters.map((item) => (
+              <div key={item.id} className={LandingPageCss["kaps-container"]}>
+                <div className={LandingPageCss["kaps-image"]}>
+                  <img
+                    src={
+                      import.meta.env.VITE_BASE_API_STATIC_URL + item.photo_url
+                    }
+                    alt=""
+                  />
+                </div>
+                <h3>{item.name}</h3>
+                <p>
+                  {item.specialization}
+                  {/* <button className={LandingPageCss["btn-kapster"]}>
+                    BOOKING NOW
+                  </button> */}
+                </p>
               </div>
-              <h3>Clarissa</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Accusantium vitae harum placeat sint culpa nisi, fugiat sed quos
-                optio quam mollitia deserunt ab blanditiis velit vel
-                necessitatibus! Reiciendis, repellat maxime.
-                <button className={LandingPageCss["btn-kapster"]}>
-                  BOOKING NOW
-                </button>
-              </p>
-            </div>
+            ))}
 
-            <div className={LandingPageCss["kaps-container"]}>
+            {/* <div className={LandingPageCss["kaps-container"]}>
               <div className={LandingPageCss["kaps-image"]}>
                 <img src="img/kapster/2.jpg" alt="" />
               </div>
@@ -195,7 +217,7 @@ export default function LandingPage() {
                   BOOKING NOW
                 </button>
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </main>

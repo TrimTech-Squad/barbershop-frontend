@@ -17,4 +17,9 @@ export type AuthContextType = {
 export type USERAUTH = {
   token: string;
   role: string;
+  id?: number;
+  name?: string;
+  email?: string;
+  photo_url?: string;
+  number?: string;
 };

@@ -217,8 +217,10 @@ nav a:focus {
 
 .service-item {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, auto));
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
+  width: 100%;
+  justify-content: flex-start;
   gap: 2.2rem;
   text-align: center;
   margin-top: 4rem;
@@ -269,9 +271,11 @@ nav a:focus {
 
 .kaps-item {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, auto));
+  grid-template-columns: repeat(3, 1fr);
   align-items: center;
   gap: 2.2rem;
+  padding: 2rem;
+  box-sizing: border-box;
   text-align: center;
   margin-top: 4rem;
 }
