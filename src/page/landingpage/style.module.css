@@ -226,6 +226,10 @@ nav a:focus {
 
 .service-cut {
   padding: 45px 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   background: rgb(255, 255, 255);
   border-radius: 0.1rem;
   border: 10px;
@@ -247,10 +251,13 @@ nav a:focus {
 
 .image-service {
   display: flex;
-  justify-content: safe;
-  margin-left: 80px;
-  width: 800px;
-  height: 100px;
+  justify-content: center;
+  width: 10rem;
+}
+
+.image-service img {
+  width: 10rem;
+  height: 10rem;
 }
 
 /*Kapster*/

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import LandingPageCss from "./style.module.css";
 
 export default function LandingPage() {
@@ -31,11 +32,11 @@ export default function LandingPage() {
                 <a href="#contact">Contact</a>
               </li>
               <div>
-                <a href="loginpage/index.html">
+                <Link to="/login">
                   <button className={LandingPageCss["button-lgn"]}>
                     Login
                   </button>{" "}
-                </a>
+                </Link>
               </div>
             </ul>
           </nav>
@@ -101,7 +102,7 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="service-cut">
+            <div className={LandingPageCss["service-cut"]}>
               <div className={LandingPageCss["image-service"]}>
                 <img src="img/service/barber.png" alt="" />
               </div>
@@ -114,7 +115,7 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="service-cut">
+            <div className={LandingPageCss["service-cut"]}>
               <div className={LandingPageCss["image-service"]}>
                 <img src="img/service/razor.png" alt="" />
               </div>
@@ -127,7 +128,7 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="service-cut">
+            <div className={LandingPageCss["service-cut"]}>
               <div className={LandingPageCss["image-service"]}>
                 <img src="img/service/hairstyle.png" alt="" />
               </div>
