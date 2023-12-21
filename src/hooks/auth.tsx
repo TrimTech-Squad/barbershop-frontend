@@ -24,6 +24,7 @@ const Auth = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
+    localStorage.removeItem("user");
     setUser(null);
   };
 
