@@ -19,11 +19,7 @@ export default async function fetchApi(
       ...config,
     });
     return res.data;
-  } catch (err) {
-    if (err instanceof AxiosError) {
-      if (err.response?.status === 401) {
-        throw new Error("Unauthorized");
-      }
-    }
+  } catch (err: unknown) {
+    throw (err as AxiosError).response?.data;
   }
 }

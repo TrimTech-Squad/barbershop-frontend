@@ -1,10 +1,15 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import AuthContext, { USERAUTH } from "../context/auth";
 
 const Auth = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<USERAUTH | null>(null);
 
+  const userMemo = useMemo(() => {
+    return user;
+  }, [user]);
+
   const login = (data: USERAUTH) => {
+    localStorage.setItem("user", JSON.stringify(data));
     setUser(data);
   };
 
@@ -12,8 +17,17 @@ const Auth = ({ children }: { children: ReactNode }) => {
     setUser(null);
   };
 
+  useEffect(() => {
+    const userStorage = localStorage.getItem("user");
+    if (userStorage) {
+      setUser(JSON.parse(userStorage));
+    }
+  }, []);
+
+  console.log(userMemo);
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user: userMemo, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
