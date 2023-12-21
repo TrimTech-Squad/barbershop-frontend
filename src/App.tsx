@@ -6,7 +6,7 @@ import { Register } from "./page/register/Register";
 import Auth from "./hooks/auth";
 import AdminLayout from "./layout/admin";
 import Dashboard from "./page/admin/dashboard";
-import { Service } from "./page/admin/users";
+import { Service } from "./page/admin/service";
 
 function App() {
   return (
