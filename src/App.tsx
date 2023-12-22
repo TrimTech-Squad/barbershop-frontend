@@ -13,6 +13,9 @@ import ServiceForm from "./page/admin/service/serviceform";
 import KapsterForm from "./page/admin/kapster/kapsterform";
 import KapsterEditForm from "./page/admin/kapster/edit";
 import EditService from "./page/admin/service/edit";
+import { KapsterService } from "./page/admin/kapsterService";
+import AddKapsterService from "./page/admin/kapsterService/add";
+import EditKapsterService from "./page/admin/kapsterService/edit";
 
 function App() {
   return (
@@ -31,6 +34,10 @@ function App() {
           <Route path="kapsters" element={<Kapster />}>
             <Route path="Add" element={<KapsterForm />} />
             <Route path="edit" element={<KapsterEditForm />} />
+          </Route>
+          <Route path="kapsterservice" element={<KapsterService />}>
+            <Route path="add" element={<AddKapsterService />} />
+            <Route path="edit" element={<EditKapsterService />} />
           </Route>
         </Route>
       </Routes>

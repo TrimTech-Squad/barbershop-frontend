@@ -16,16 +16,15 @@ import fetchApi from "../../../helper/fetch";
 import { Link } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 
-const Actions = ({ id, description, serviceName, isActive }: Service) => {
+const Actions = ({ id, price, isActive }: KapsterService) => {
   const [isActiveService, setIsActiveService] = useState(isActive);
 
   const changeStatus = async () => {
     if (isActiveService === isActive) return;
     try {
-      await fetchApi(`/services/${id}`, "PUT", {
+      await fetchApi(`/kapster-service/${id}`, "PUT", {
         id,
-        description,
-        serviceName,
+        price,
         isActive: isActiveService,
       });
     } catch (error) {
@@ -55,13 +54,23 @@ const ServiceColumns: GridColDef[] = [
   },
   {
     field: "serviceName",
-    headerName: "Name",
+    headerName: "Service Name",
     width: 300,
   },
   {
-    field: "description",
-    headerName: "Description",
+    field: "kapsterName",
+    headerName: "Kapster Name",
     width: 300,
+  },
+  {
+    field: "gender",
+    headerName: "Gender",
+    width: 300,
+  },
+  {
+    field: "price",
+    headerName: "Price",
+    width: 150,
   },
   {
     field: "status",
@@ -76,9 +85,10 @@ const ServiceColumns: GridColDef[] = [
     headerName: "Actions",
     width: 150,
     renderCell: ({ row }) => {
+      console.log(row);
       return (
         <Link
-          to={`/admin/services/edit?id=${row.id}&name=${row.serviceName}&description=${row.description}&isactive=${row.isActive}`}
+          to={`/admin/kapsterservice/edit?id=${row.id}&isActive=${row.isActive}&price=${row.price}`}
         >
           <IconButton>
             <EditIcon />
@@ -89,40 +99,67 @@ const ServiceColumns: GridColDef[] = [
   },
 ];
 
-type Service = {
-  id: number;
+type KapsterService = {
+  kapsterName: string;
   serviceName: string;
-  description: string;
+  id: number;
+  price: number;
   isActive: boolean;
 };
 
-export const ServicesContext = createContext<{
-  services: Service[];
-  setServices: React.Dispatch<React.SetStateAction<Service[]>>;
+type KapsterServiceFetch = {
+  service?: {
+    id: number;
+    serviceName: string;
+  };
+  kapster?: {
+    id: number;
+    name: string;
+    gender: string;
+  };
+} & KapsterService;
+
+export const KapsterServiceContext = createContext<{
+  kapsterServices: KapsterService[];
+  setKapsterServices: React.Dispatch<React.SetStateAction<KapsterService[]>>;
 }>({
-  services: [],
-  setServices: () => {},
+  kapsterServices: [],
+  setKapsterServices: () => {},
 });
 
-export const Service = () => {
-  const [rows, setRows] = useState<Service[]>([]);
-  const [presistenRows, setPresistenRows] = useState<Service[]>([]);
+export const KapsterService = () => {
+  const [rows, setRows] = useState<KapsterService[]>([]);
+  const [presistenRows, setPresistenRows] = useState<KapsterService[]>([]);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    const getUsers = async () => {
-      const res = await fetchApi("/services?all=true", "GET");
-      setRows(res.data);
-      setPresistenRows(res.data);
+    const getData = async () => {
+      const res = await fetchApi("/kapster-service", "GET");
+
+      const reshapedData = res.data.map((data: KapsterServiceFetch) => {
+        const { service, kapster, ...rest } = data;
+        return {
+          ...rest,
+          serviceName: service?.serviceName,
+          kapsterName: kapster?.name,
+          idService: service?.id,
+          idKapster: kapster?.id,
+          gender: kapster?.gender,
+        };
+      });
+
+      setRows(reshapedData);
+      setPresistenRows(reshapedData);
     };
-    getUsers();
+    getData();
   }, []);
 
   useEffect(() => {
     const filteredData = presistenRows.filter(
       (row) =>
         row.serviceName.toLowerCase().includes(search.toLowerCase()) ||
-        row.id.toString().includes(search.toLowerCase())
+        row.id.toString().includes(search.toLowerCase()) ||
+        row.kapsterName.toLowerCase().includes(search.toLowerCase())
     );
     setRows(filteredData);
   }, [search, presistenRows]);
@@ -137,7 +174,7 @@ export const Service = () => {
         </Link>
         {location && (
           <Link color="inherit" to="/admin/services">
-            Services
+            Kapster Services
           </Link>
         )}
         <Typography
@@ -146,16 +183,19 @@ export const Service = () => {
           fontWeight="bold"
           textTransform="capitalize"
         >
-          {!location ? "Services" : location}
+          {!location ? "Kapster Services" : location}
         </Typography>
       </Breadcrumbs>
-      <ServicesContext.Provider
-        value={{ services: presistenRows, setServices: setPresistenRows }}
+      <KapsterServiceContext.Provider
+        value={{
+          kapsterServices: presistenRows,
+          setKapsterServices: setPresistenRows,
+        }}
       >
         <Outlet />
-      </ServicesContext.Provider>
+      </KapsterServiceContext.Provider>
       <Typography variant="h5" fontWeight="bold">
-        Services
+        Kapster Services
       </Typography>
       <Stack
         direction="row"
@@ -171,13 +211,13 @@ export const Service = () => {
           }
           onChange={(e) => setSearch(e.target.value)}
           value={search}
-          placeholder="Search Service"
+          placeholder="Search KapsterService"
           sx={{ width: "20rem" }}
           size="small"
         />
-        <Link to="/admin/add-service">
+        <Link to="./add">
           <Button variant="contained" color="primary">
-            Add Service
+            Add KapsterService
           </Button>
         </Link>
       </Stack>

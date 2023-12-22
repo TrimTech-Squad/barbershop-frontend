@@ -112,7 +112,7 @@ const KapsterColumns: GridColDef[] = [
   },
 ];
 
-type Kapster = {
+export type Kapster = {
   id: number;
   name: string;
   gender: string;
