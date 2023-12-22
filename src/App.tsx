@@ -6,8 +6,11 @@ import { Register } from "./page/register/Register";
 import Auth from "./hooks/auth";
 import AdminLayout from "./layout/admin";
 import Dashboard from "./page/admin/dashboard";
-import { Service } from "./page/admin/service";
+import { Kapster } from "./page/admin/kapster/kapster";
+import { Service } from "./page/admin/service/service";
 import LandingPage from "./page/landingpage";
+import ServiceForm from "./page/admin/service/serviceform";
+import KapsterForm from "./page/admin/kapster/kapsterform";
 
 function App() {
   return (
@@ -19,6 +22,10 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="services" element={<Service />} />
+          <Route path="add-service" element={<ServiceForm />} />
+          <Route path="kapsters" element={<Kapster />} />
+          <Route path="add-kapster" element={<KapsterForm />} />
+
         </Route>
       </Routes>
     </Auth>
