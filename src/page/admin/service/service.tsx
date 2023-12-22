@@ -4,11 +4,13 @@ import {
   Link,
   OutlinedInput,
   InputAdornment,
+  Button
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
-import fetchApi from "../../helper/fetch";
+import { useNavigate } from "react-router-dom";
+import fetchApi from "../../../helper/fetch";
 
 const ServiceColumns: GridColDef[] = [
   {
@@ -36,6 +38,7 @@ type Service = {
 
 export const Service = () => {
   const [rows, setRows] = useState<Service[]>([]);
+  const navigate = useNavigate();
   useEffect(() => {
     const getUsers = async () => {
       const res = await fetchApi("/services", "GET");
@@ -43,6 +46,11 @@ export const Service = () => {
     };
     getUsers();
   }, []);
+
+  const handleFormService = () => {
+    navigate('/admin/add-service'); // Navigasi ke halaman form saat tombol tambah diklik
+  };
+
 
   return (
     <>
@@ -65,6 +73,9 @@ export const Service = () => {
         sx={{ width: "20rem" }}
         size="small"
       />
+      <Button variant="contained" color="primary" onClick={handleFormService}>
+        Tambah Service
+      </Button>
       <DataGrid
         rows={rows}
         columns={ServiceColumns}
@@ -76,6 +87,7 @@ export const Service = () => {
         pageSizeOptions={[5, 10, 20, 50, 100]}
         checkboxSelection
       />
+     
     </>
   );
 };
