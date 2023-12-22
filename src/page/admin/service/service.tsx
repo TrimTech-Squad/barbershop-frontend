@@ -4,7 +4,8 @@ import {
   Link,
   OutlinedInput,
   InputAdornment,
-  Button
+  Button,
+  Stack,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
@@ -48,9 +49,8 @@ export const Service = () => {
   }, []);
 
   const handleFormService = () => {
-    navigate('/admin/add-service'); // Navigasi ke halaman form saat tombol tambah diklik
+    navigate("/admin/add-service"); // Navigasi ke halaman form saat tombol tambah diklik
   };
-
 
   return (
     <>
@@ -63,19 +63,21 @@ export const Service = () => {
       <Typography variant="h5" fontWeight="bold">
         Services
       </Typography>
-      <OutlinedInput
-        startAdornment={
-          <InputAdornment position="start">
-            <SearchIcon />
-          </InputAdornment>
-        }
-        placeholder="Search Service"
-        sx={{ width: "20rem" }}
-        size="small"
-      />
-      <Button variant="contained" color="primary" onClick={handleFormService}>
-        Tambah Service
-      </Button>
+      <Stack direction="column" spacing={2} sx={{ marginTop: 2 }}>
+        <OutlinedInput
+          startAdornment={
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          }
+          placeholder="Search Service"
+          sx={{ width: "20rem" }}
+          size="small"
+        />
+        <Button variant="contained" color="primary" onClick={handleFormService}>
+          Tambah Service
+        </Button>
+      </Stack>
       <DataGrid
         rows={rows}
         columns={ServiceColumns}
@@ -87,7 +89,6 @@ export const Service = () => {
         pageSizeOptions={[5, 10, 20, 50, 100]}
         checkboxSelection
       />
-     
     </>
   );
 };

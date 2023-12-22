@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Grid, Paper, Typography } from '@mui/material';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
 
-import './serviceform.css';
+import "./serviceform.css";
 
-const ServiceForm = ({ onSubmit }) => {
-  const [serviceName, setServiceName] = useState('');
-  const [serviceDescription, setServiceDescription] = useState('');
+const ServiceForm = () => {
+  const [serviceName, setServiceName] = useState("");
+  const [serviceDescription, setServiceDescription] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -17,20 +17,18 @@ const ServiceForm = ({ onSubmit }) => {
       description: serviceDescription,
     };
 
-    onSubmit(newService);
+    navigate("/admin/services");
 
-    navigate('/admin/services');
-
-    const existingServices = JSON.parse(localStorage.getItem('services')) || [];
+    const existingServices = JSON.parse(localStorage.getItem("services")) || [];
     const updatedServices = [...existingServices, newService];
-    localStorage.setItem('services', JSON.stringify(updatedServices));
+    localStorage.setItem("services", JSON.stringify(updatedServices));
 
-    setServiceName('');
-    setServiceDescription('');
+    setServiceName("");
+    setServiceDescription("");
   };
 
   const handleAddServiceClick = () => {
-    navigate('/admin/add-service');
+    navigate("/admin/add-service");
   };
 
   return (
@@ -61,7 +59,12 @@ const ServiceForm = ({ onSubmit }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button type="button" variant="outlined" onClick={handleAddServiceClick} fullWidth>
+              <Button
+                type="button"
+                variant="outlined"
+                onClick={handleAddServiceClick}
+                fullWidth
+              >
                 Add Service
               </Button>
             </Grid>

@@ -9,35 +9,55 @@ import {
   FormLabel,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 import fetchApi from "../../../helper/fetch";
 import { useContext } from "react";
 import { KapstersContext } from "./kapster";
 
 import "./kapster.css";
+import useQuery from "../../../helper/query";
 
-const KapsterForm = () => {
-  const [kapsterName, setKapsterName] = useState("");
-  const [gender, setGender] = useState("");
-  const [specialization, setSpecialization] = useState("");
+const KapsterEditForm = () => {
+  const query = useQuery();
+  const [kapsterName, setKapsterName] = useState(query.get("name"));
+  const [gender, setGender] = useState(query.get("gender"));
+  const [specialization, setSpecialization] = useState(
+    query.get("specialization")
+  );
   const navigate = useNavigate();
 
   const kapsterContext = useContext(KapstersContext);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    const newKapster = {
-      name: kapsterName,
-      gender: gender,
-      specialization: specialization,
-      status: "Available",
+    const updateKapster: {
+      id: number;
+      name: string;
+      gender: string;
+      specialization: string;
+      status: "Available" | "Not Available" | "Resigned";
+    } = {
+      id: parseInt(query.get("id") ?? "-1"),
+      name: kapsterName ?? "",
+      gender: gender ?? "",
+      specialization: specialization ?? "",
+      status:
+        (query.get("status") as "Available" | "Not Available" | "Resigned") ??
+        "Avaiable",
     };
 
     try {
-      const response = await fetchApi("/kapsters", "POST", newKapster);
+      await fetchApi("/kapsters/" + query.get("id"), "PUT", updateKapster);
+      kapsterContext.setKapsters((prevKapsters) => {
+        const kapsters = [...prevKapsters];
+        const index = kapsters.findIndex(
+          (kapster) => kapster.id === updateKapster.id
+        );
+        kapsters[index] = updateKapster;
+        return kapsters;
+      });
 
-      kapsterContext.setKapsters([...kapsterContext.kapsters, response.data]);
       setKapsterName("");
       setGender("");
       setSpecialization("");
@@ -48,14 +68,24 @@ const KapsterForm = () => {
     }
   };
 
+  useEffect(() => {
+    setGender(query.get("gender"));
+    setKapsterName(query.get("name"));
+    setSpecialization(query.get("specialization"));
+  }, [query]);
+
   return (
     <>
       <Typography variant="h5" fontWeight="bold">
-        Add Kapster
+        Edit Kapster
       </Typography>
       <form onSubmit={handleSubmit} style={{ padding: 0 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item sx={{ padding: 1 }} xs={12}>
+            <FormLabel component="legend">ID</FormLabel>
+            <TextField required value={query.get("id")} disabled />
+          </Grid>
+          <Grid item sx={{ padding: 1 }} xs={12}>
             <TextField
               label="Name"
               fullWidth
@@ -64,7 +94,7 @@ const KapsterForm = () => {
               onChange={(e) => setKapsterName(e.target.value)}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item sx={{ padding: 1 }} xs={12}>
             <FormLabel component="legend">Gender</FormLabel>
             <RadioGroup
               aria-label="gender"
@@ -80,7 +110,7 @@ const KapsterForm = () => {
               />
             </RadioGroup>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item sx={{ padding: 1 }} xs={12}>
             <TextField
               label="Specialization"
               fullWidth
@@ -91,9 +121,9 @@ const KapsterForm = () => {
               rows={4}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item sx={{ padding: 1 }} xs={12}>
             <Button type="submit" variant="contained" fullWidth>
-              Add Kapster
+              Update Kapster
             </Button>
           </Grid>
         </Grid>
@@ -102,4 +132,4 @@ const KapsterForm = () => {
   );
 };
 
-export default KapsterForm;
+export default KapsterEditForm;

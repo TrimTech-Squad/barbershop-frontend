@@ -11,6 +11,7 @@ import { Service } from "./page/admin/service/service";
 import LandingPage from "./page/landingpage";
 import ServiceForm from "./page/admin/service/serviceform";
 import KapsterForm from "./page/admin/kapster/kapsterform";
+import KapsterEditForm from "./page/admin/kapster/edit";
 
 function App() {
   return (
@@ -23,9 +24,10 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="services" element={<Service />} />
           <Route path="add-service" element={<ServiceForm />} />
-          <Route path="kapsters" element={<Kapster />} />
-          <Route path="add-kapster" element={<KapsterForm />} />
-
+          <Route path="kapsters" element={<Kapster />}>
+            <Route path="Add" element={<KapsterForm />} />
+            <Route path="edit" element={<KapsterEditForm />} />
+          </Route>
         </Route>
       </Routes>
     </Auth>
