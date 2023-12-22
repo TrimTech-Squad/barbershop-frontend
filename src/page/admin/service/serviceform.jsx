@@ -1,30 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
 
 import "./serviceform.css";
+import fetchApi from "../../../helper/fetch";
+import { ServicesContext } from "./service";
 
 const ServiceForm = () => {
   const [serviceName, setServiceName] = useState("");
   const [serviceDescription, setServiceDescription] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const servicesContext = useContext(ServicesContext);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newService = {
-      id: Math.floor(Math.random() * 1000),
       serviceName: serviceName,
       description: serviceDescription,
     };
 
-    navigate("/admin/services");
-
-    const existingServices = JSON.parse(localStorage.getItem("services")) || [];
-    const updatedServices = [...existingServices, newService];
-    localStorage.setItem("services", JSON.stringify(updatedServices));
-
-    setServiceName("");
-    setServiceDescription("");
+    try {
+      const res = await fetchApi("/services", "POST", newService);
+      servicesContext.setServices([...servicesContext.services, res.data]);
+      navigate("/admin/services");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleAddServiceClick = () => {
@@ -60,7 +62,7 @@ const ServiceForm = () => {
             </Grid>
             <Grid item xs={12}>
               <Button
-                type="button"
+                type="submit"
                 variant="outlined"
                 onClick={handleAddServiceClick}
                 fullWidth

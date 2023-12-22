@@ -12,6 +12,7 @@ import LandingPage from "./page/landingpage";
 import ServiceForm from "./page/admin/service/serviceform";
 import KapsterForm from "./page/admin/kapster/kapsterform";
 import KapsterEditForm from "./page/admin/kapster/edit";
+import EditService from "./page/admin/service/edit";
 
 function App() {
   return (
@@ -22,7 +23,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="services" element={<Service />} />
+          <Route path="add-service" element={<ServiceForm />} />
+          <Route path="services" element={<Service />}>
+            <Route path="edit" element={<EditService />} />
+          </Route>
           <Route path="add-service" element={<ServiceForm />} />
           <Route path="kapsters" element={<Kapster />}>
             <Route path="Add" element={<KapsterForm />} />
