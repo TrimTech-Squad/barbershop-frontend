@@ -16,6 +16,7 @@ import EditService from "./page/admin/service/edit";
 import { KapsterService } from "./page/admin/kapsterService";
 import AddKapsterService from "./page/admin/kapsterService/add";
 import EditKapsterService from "./page/admin/kapsterService/edit";
+import Appointment from "./page/admin/appointment";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="add" element={<AddKapsterService />} />
             <Route path="edit" element={<EditKapsterService />} />
           </Route>
+          <Route path="appointment" element={<Appointment />} />
         </Route>
       </Routes>
     </Auth>

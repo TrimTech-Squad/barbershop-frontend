@@ -1,4 +1,4 @@
-import { Dashboard, People, Search } from "@mui/icons-material";
+import { People, Search } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -13,8 +13,10 @@ import {
   Stack,
 } from "@mui/material";
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
-
+import { Link, Outlet } from "react-router-dom";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import EngineeringIcon from "@mui/icons-material/Engineering";
 const AdminLayout = () => {
   return (
     <Stack direction="row" width="100%">
@@ -48,18 +50,51 @@ export const Sidebar = () => {
       }}
     >
       <List sx={{ width: "15rem" }}>
-        <ListItem>
-          <ListItemIcon>
-            <Dashboard />
-          </ListItemIcon>
-          <ListItemText>Dashboard</ListItemText>
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <People />
-          </ListItemIcon>
-          <ListItemText>Users</ListItemText>
-        </ListItem>
+        <Link
+          to="/admin/appointment"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <ListItem>
+            <ListItemIcon>
+              <ShoppingBagIcon />
+            </ListItemIcon>
+            <ListItemText>Appointments</ListItemText>
+          </ListItem>
+        </Link>
+        <Divider />
+        <Link
+          to="/admin/kapsters"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <ListItem>
+            <ListItemIcon>
+              <People />
+            </ListItemIcon>
+            <ListItemText>Manage Kapsters</ListItemText>
+          </ListItem>
+        </Link>
+        <Link
+          to="/admin/services"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <ListItem>
+            <ListItemIcon>
+              <InventoryIcon />
+            </ListItemIcon>
+            <ListItemText>Manage Services</ListItemText>
+          </ListItem>
+        </Link>
+        <Link
+          to="/admin/kapsterservice"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <ListItem>
+            <ListItemIcon>
+              <EngineeringIcon />
+            </ListItemIcon>
+            <ListItemText>Manage Assigments</ListItemText>
+          </ListItem>
+        </Link>
       </List>
     </Drawer>
   );

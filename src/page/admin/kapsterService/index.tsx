@@ -132,6 +132,8 @@ export const KapsterService = () => {
   const [presistenRows, setPresistenRows] = useState<KapsterService[]>([]);
   const [search, setSearch] = useState("");
 
+  const location = useLocation().pathname.split("/")[3];
+
   useEffect(() => {
     const getData = async () => {
       const res = await fetchApi("/kapster-service", "GET");
@@ -152,7 +154,7 @@ export const KapsterService = () => {
       setPresistenRows(reshapedData);
     };
     getData();
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     const filteredData = presistenRows.filter(
@@ -163,8 +165,6 @@ export const KapsterService = () => {
     );
     setRows(filteredData);
   }, [search, presistenRows]);
-
-  const location = useLocation().pathname.split("/")[3];
 
   return (
     <>
