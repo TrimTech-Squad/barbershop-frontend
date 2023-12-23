@@ -12,7 +12,6 @@ const Auth = ({ children }: { children: ReactNode }) => {
   const login = async (data: USERAUTH) => {
     try {
       const res = await fetchApi("/user", "GET");
-      console.log(res);
 
       const fetchedUser = { ...data, ...res.data };
       localStorage.setItem("user", JSON.stringify(fetchedUser));
@@ -28,13 +27,19 @@ const Auth = ({ children }: { children: ReactNode }) => {
     setUser(null);
   };
 
-  console.log(userMemo);
-
   useEffect(() => {
     const userStorage = localStorage.getItem("user");
-    if (userStorage) {
-      setUser(JSON.parse(userStorage));
-    }
+    if (!userStorage) return;
+
+    (async () => {
+      try {
+        const res = await fetchApi("/user", "GET");
+        const fetchedUser = { ...JSON.parse(userStorage), ...res.data };
+        setUser(fetchedUser);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
   }, []);
 
   return (

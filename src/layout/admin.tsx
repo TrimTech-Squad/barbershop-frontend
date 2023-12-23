@@ -12,12 +12,22 @@ import {
   OutlinedInput,
   Stack,
 } from "@mui/material";
-import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import EngineeringIcon from "@mui/icons-material/Engineering";
+import useAuth from "../hooks/protected";
 const AdminLayout = () => {
+  const isAuthorized = useAuth({ role: "Admin" });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthorized) {
+      navigate("/signin");
+    }
+  }, [isAuthorized]);
+
   return (
     <Stack direction="row" width="100%">
       <Sidebar />
@@ -43,7 +53,6 @@ export const Sidebar = () => {
       anchor="left"
       open={open}
       onClose={toggleDrawer}
-      keepMounted={true}
       variant="permanent"
       sx={{
         width: "15rem",

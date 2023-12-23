@@ -42,42 +42,20 @@ const Actions = ({ status, gender, id, name, specialization }: Kapster) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusKapster]);
 
-  console.log(gender);
   return (
-    <Stack
-      direction="row"
-      justifyContent="space-between"
-      alignItems={"center"}
-      spacing={2}
-      width="150px"
+    <Select
+      value={statusKapster}
+      sx={{ width: "100%" }}
+      onChange={(e) =>
+        setStatusKapster(
+          e.target.value as "Available" | "Not Available" | "Resigned"
+        )
+      }
     >
-      <Link
-        to={`/admin/kapsters/edit?id=${id}&name=${name}&gender=${gender}&specialization=${specialization}&status=${status}`}
-        className="link"
-      >
-        <IconButton
-          aria-label="upload picture"
-          component="span"
-          size="small"
-          sx={{ flexShrink: 0 }}
-        >
-          <EditIcon />
-        </IconButton>
-      </Link>
-      <Select
-        value={statusKapster}
-        sx={{ width: "100%" }}
-        onChange={(e) =>
-          setStatusKapster(
-            e.target.value as "Available" | "Not Available" | "Resigned"
-          )
-        }
-      >
-        <MenuItem value="Available">Avaiable</MenuItem>
-        <MenuItem value="Not Available">Not Available</MenuItem>
-        <MenuItem value="Resigned">Resigned</MenuItem>
-      </Select>
-    </Stack>
+      <MenuItem value="Available">Avaiable</MenuItem>
+      <MenuItem value="Not Available">Not Available</MenuItem>
+      <MenuItem value="Resigned">Resigned</MenuItem>
+    </Select>
   );
 };
 
@@ -103,11 +81,34 @@ const KapsterColumns: GridColDef[] = [
     width: 300,
   },
   {
+    field: "status",
+    headerName: "Status",
+    width: 200,
+    renderCell: ({ row }) => {
+      return <Actions {...row} />;
+    },
+  },
+
+  {
     field: "action",
     headerName: "Action",
     width: 150,
     renderCell: ({ row }) => {
-      return <Actions {...row} />;
+      return (
+        <Link
+          to={`/admin/kapsters/edit?id=${row.id}&name=${row.name}&gender=${row.gender}&specialization=${row.specialization}&status=${row.status}`}
+          className="link"
+        >
+          <IconButton
+            aria-label="upload picture"
+            component="span"
+            size="small"
+            sx={{ flexShrink: 0 }}
+          >
+            <EditIcon />
+          </IconButton>
+        </Link>
+      );
     },
   },
 ];

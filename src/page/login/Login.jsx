@@ -6,7 +6,7 @@ import Toast from "../../component/toast";
 
 import LoginPageCss from "./style.module.css";
 
-export const Login = () => {
+export const Signin = () => {
   const [toast, setToast] = useState(null);
 
   const authContext = useContext(AuthContext);

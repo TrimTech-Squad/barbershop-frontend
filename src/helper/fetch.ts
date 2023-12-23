@@ -6,7 +6,6 @@ export default async function fetchApi(
   data?: Record<string, unknown>,
   config?: AxiosRequestConfig
 ) {
-  console.log(import.meta.env.VITE_BASE_API_URL);
   try {
     const res = await axios({
       method: method,
@@ -20,6 +19,11 @@ export default async function fetchApi(
     });
     return res.data;
   } catch (err: unknown) {
+    if (axios.isAxiosError(err)) {
+      if (err.response?.status === 401) {
+        localStorage.removeItem("user");
+      }
+    }
     throw (err as AxiosError).response?.data;
   }
 }

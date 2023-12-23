@@ -1,6 +1,6 @@
 // import logo from './logo.svg';
 import "./App.css";
-import { Login } from "./page/login/Login";
+import { Signin } from "./page/login/Login";
 import { Route, Routes } from "react-router-dom";
 import { Register } from "./page/register/Register";
 import Auth from "./hooks/auth";
@@ -23,7 +23,7 @@ function App() {
     <Auth>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<Signin />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
