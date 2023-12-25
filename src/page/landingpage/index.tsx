@@ -42,19 +42,23 @@ export default function LandingPage() {
 
   return (
     <>
-      <header>
+      <header style={{ display: "flex", alignItems: "center" }}>
         <div
           className={`${LandingPageCss["container"]} ${LandingPageCss["container-nav"]} `}
           style={{ alignItems: "center" }}
         >
-          <div className={LandingPageCss["logo"]}>
+          <div
+            className={LandingPageCss["logo"]}
+            style={{ display: "flex", alignItems: "center" }}
+          >
             <img src="img/logo.png" alt="" />
             <div className={LandingPageCss["logo-text"]}>
-              <h1>Trimtech Barbershop</h1>
+              <h1>Trimtech </h1>
+              <h1 style={{ marginLeft: "1rem" }}>Barbershop</h1>
             </div>
           </div>
           <nav>
-            <ul>
+            <ul style={{ display: "flex", alignItems: "center" }}>
               <li>
                 <a href="#home">Home</a>
               </li>
@@ -86,7 +90,7 @@ export default function LandingPage() {
                     </Typography>
                   </>
                 ) : (
-                  <Link to="/login">
+                  <Link to="/login" style={{ padding: 0 }}>
                     <button className={LandingPageCss["button-lgn"]}>
                       Login
                     </button>{" "}
@@ -111,7 +115,11 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className={LandingPageCss["about"]} id="about">
+        <div
+          className={LandingPageCss["about"]}
+          id="about"
+          style={{ height: "100vh", padding: "5rem" }}
+        >
           <div className={LandingPageCss["about-img"]}>
             <img src="img/about.png" alt="Image" />
           </div>
@@ -137,7 +145,11 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className={LandingPageCss["service"]} id="service">
+        <div
+          className={LandingPageCss["service"]}
+          id="service"
+          style={{ padding: "5rem" }}
+        >
           <div className={LandingPageCss["text-center"]}>
             <h2>OUR BEST SERVICES THAT WE OFFERING TO YOU</h2>
             <h4>Our Service</h4>
@@ -168,7 +180,16 @@ export default function LandingPage() {
 
           <div className={LandingPageCss["kaps-item"]}>
             {kapsters.map((item) => (
-              <div key={item.id} className={LandingPageCss["kaps-container"]}>
+              <div
+                key={item.id}
+                className={LandingPageCss["kaps-container"]}
+                style={{
+                  margin: 0,
+                  justifyContent: "center",
+                  marginRight: "auto",
+                  marginLeft: "auto",
+                }}
+              >
                 <div className={LandingPageCss["kaps-image"]}>
                   <img
                     src={
@@ -186,38 +207,6 @@ export default function LandingPage() {
                 </p>
               </div>
             ))}
-
-            {/* <div className={LandingPageCss["kaps-container"]}>
-              <div className={LandingPageCss["kaps-image"]}>
-                <img src="img/kapster/2.jpg" alt="" />
-              </div>
-              <h3>Joe</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Accusantium vitae harum placeat sint culpa nisi, fugiat sed quos
-                optio quam mollitia deserunt ab blanditiis velit vel
-                necessitatibus! Reiciendis, repellat maxime.
-                <button className={LandingPageCss["btn-kapster"]}>
-                  BOOKING NOW
-                </button>
-              </p>
-            </div>
-
-            <div className={LandingPageCss["kaps-container"]}>
-              <div className={LandingPageCss["kaps-image"]}>
-                <img src="img/kapster/3.jpg" alt="" />
-              </div>
-              <h3>Luke</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Accusantium vitae harum placeat sint culpa nisi, fugiat sed quos
-                optio quam mollitia deserunt ab blanditiis velit vel
-                necessitatibus! Reiciendis, repellat maxime.
-                <button className={LandingPageCss["btn-kapster"]}>
-                  BOOKING NOW
-                </button>
-              </p>
-            </div> */}
           </div>
         </div>
       </main>

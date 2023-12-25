@@ -267,13 +267,18 @@ nav a:focus {
 .kapster {
   background: url(/img/bg3.jpg);
   background-size: 100%;
+  overflow: hidden;
 }
 
 .kaps-item {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  overflow-x: auto;
+  grid-auto-flow: column;
   align-items: center;
   gap: 2.2rem;
+  column-gap: 10rem;
   padding: 2rem;
   box-sizing: border-box;
   text-align: center;
@@ -283,6 +288,7 @@ nav a:focus {
 .kaps-container {
   padding: 45px 30px;
   width: 350px;
+  height: 500px;
   border-radius: 40px;
   border: 10px;
   cursor: pointer;
