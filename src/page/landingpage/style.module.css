@@ -78,22 +78,13 @@ nav a:focus {
 
 /*home*/
 
-.home {
-  background-image: url(/img/bg3.jpg);
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-}
-
 .overlay {
-  /* position: absolute; */
-  height: 100vh;
+  position: absolute;
+  height: 100%;
   width: 100%;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.65);
-
   color: white;
   display: flex;
   align-items: center;
@@ -217,10 +208,8 @@ nav a:focus {
 
 .service-item {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, auto));
   align-items: center;
-  width: 100%;
-  justify-content: flex-start;
   gap: 2.2rem;
   text-align: center;
   margin-top: 4rem;
@@ -228,10 +217,6 @@ nav a:focus {
 
 .service-cut {
   padding: 45px 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
   background: rgb(255, 255, 255);
   border-radius: 0.1rem;
   border: 10px;
@@ -253,13 +238,10 @@ nav a:focus {
 
 .image-service {
   display: flex;
-  justify-content: center;
-  width: 10rem;
-}
-
-.image-service img {
-  width: 10rem;
-  height: 10rem;
+  justify-content: safe;
+  margin-left: 80px;
+  width: 800px;
+  height: 100px;
 }
 
 /*Kapster*/
@@ -271,11 +253,9 @@ nav a:focus {
 
 .kaps-item {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, auto));
   align-items: center;
   gap: 2.2rem;
-  padding: 2rem;
-  box-sizing: border-box;
   text-align: center;
   margin-top: 4rem;
 }
@@ -319,4 +299,243 @@ nav a:focus {
   margin-bottom: 10px;
   color: rgb(247, 247, 247);
   text-align: center;
+}
+
+/* Appointment */
+body {
+  background: url(img/bg4.jpg);
+  background-size: 40%;
+}
+#body_header {
+  width: auto;
+  margin: 0px auto;
+  padding-top: 50px;
+  text-align: center;
+  font-size: 25px;
+  color: white;
+}
+form {
+  max-width: 640px;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+h1 {
+  margin: 0 0 30px 0;
+  text-align: center;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="email"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+textarea,
+select {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  font-size: 16px;
+  height: auto;
+  margin: auto;
+  outline: 0;
+  padding: 8px;
+  width: 100%;
+  background-color: #e8eeef;
+  color: black;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+  margin-bottom: 30px;
+}
+
+select {
+  padding: 6px;
+  height: 32px;
+  border-radius: 2px;
+}
+
+button {
+  padding: 19px 39px 18px 39px;
+  color: #fff;
+  background-color: #4bc970;
+  font-size: 18px;
+  text-align: center;
+  font-style: normal;
+  border-radius: 5px;
+  width: 100%;
+  border: 1px solid #3ac162;
+  border-width: 1px 1px 3px;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+fieldset {
+  margin-bottom: 30px;
+  border: none;
+}
+
+legend {
+  font-size: 1.4em;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+label.light {
+  font-weight: 300;
+  display: inline;
+}
+
+.number {
+  background-color: #5fcf80;
+  color: #fff;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  font-size: 0.8em;
+  margin-right: 4px;
+  line-height: 30px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-radius: 100%;
+}
+
+/* footer */
+
+footer {
+  background-color: #000000ff;
+  position: relative;
+  width: 100%;
+}
+.footer-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.col {
+  min-width: 250px;
+  color: #f2f2f2f2;
+  font-family: poppins;
+  padding: 0 2rem;
+}
+
+.col h3 {
+  color: #ff014fff;
+  margin-bottom: 20px;
+  position: relative;
+  cursor: pointer;
+}
+.col h3::after {
+  content: "";
+  height: 3px;
+  width: 0px;
+  background-color: #ff014fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: 0.3s ease;
+}
+.col h3:hover::after {
+  width: 30px;
+}
+.col .social a i {
+  color: #ff014fff;
+  margin-top: 2rem;
+  margin-right: 5px;
+  transition: 0.3s ease;
+}
+.col .social a i:hover {
+  transform: scale(1.5);
+  filter: grayscale(25);
+}
+.col .links a {
+  display: block;
+  text-decoration: none;
+  color: #f2f2f2;
+  margin-bottom: 5px;
+  position: relative;
+  transition: 0.3s ease;
+}
+.col .links a::before {
+  content: "";
+  height: 16px;
+  width: 3px;
+  position: absolute;
+  top: 5px;
+  left: -10px;
+  background-color: #ff014fff;
+  transition: 0.5s ease;
+  opacity: 0;
+}
+.col .links a:hover::before {
+  opacity: 1;
+}
+.col .links a:hover {
+  transform: translateX(-8px);
+  color: #ff014fff;
+}
+.col .contact-details {
+  display: inline-flex;
+  justify-content: space-between;
+}
+.col .contact-details i {
+  margin-right: 15px;
+}
+.row .form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+}
+.row .form input {
+  background-color: #1a1c20ff;
+  border: 0;
+  outline: none;
+  padding: 14px 20px;
+  border-radius: 6px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.form button {
+  padding: 14px 20px;
+  border: 0;
+  border-radius: 6px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: #ff014fff;
+}
+
+.footer-bottom {
+  background: #1a1c20ff;
+  width: 100vw;
+  padding: 20px 0;
+  text-align: center;
+  margin-top: 50px;
+}
+.footer-bottom p {
+  font-size: 14px;
+  word-spacing: 2px;
+  text-transform: capitalize;
+  color: white;
+}
+.footer-bottom span {
+  text-transform: uppercase;
+  opacity: 0.4;
+  font-weight: 200;
 }
