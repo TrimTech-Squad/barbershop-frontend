@@ -220,7 +220,105 @@ export default function LandingPage() {
             </div> */}
           </div>
         </div>
+
+        {/* Appointment Form */}
+        <div className={LandingPageCss['appointment']} id="contact">
+          <div id="body_header">
+            <h1>Appointment Request Form</h1>
+            <p>Make your appointments easier</p>
+          </div>
+          <form action="#" method="post">
+            <fieldset>
+              <legend>
+                <span className={LandingPageCss['number']}>1</span>Your basic details
+              </legend>
+              <label htmlFor="name">Name*:</label>
+              <input type="text" id="name" name="user_name" placeholder="trimtech" required pattern="[a-zA-Z0-9]+" />
+
+              <label htmlFor="mail">Email*:</label>
+              <input type="email" id="mail" name="user_email" placeholder="trimtech@gmail.com" required />
+            </fieldset>
+
+            <fieldset>
+              <legend>
+                <span className={LandingPageCss['number']}>2</span>Appointment Details
+              </legend>
+              <label htmlFor="appointment_for">Appointment for Kapster*:</label>
+              <select id="appointment_for" name="appointment_for" required>
+                <option value="clarissa">Clarissa</option>
+                <option value="joe">Joe </option>
+                <option value="luke">Luke</option>
+              </select>
+              <label htmlFor="service">Service</label>
+              <select id="service_id" name="service_id" required>
+                <option value="haircut">Haircut</option>
+                <option value="massage">Massage </option>
+                <option value="razorcut">Razor Cut</option>
+                <option value="hairstyle">Hair Style</option>
+              </select>
+              <label htmlFor="date">Date*:</label>
+              <input type="date" name="date" value="" required />
+              <input type="time" id="time" name="utime" min="8:00" max="20:00" value="8:00" className={LandingPageCss['dtt']} required />
+            </fieldset>
+            <button type="submit">Request For Appointment</button>
+          </form>
+        </div>
+
+        <footer>
+      {/* Footer section */}
+      <div className={LandingPageCss['footer']}>
+        <h3>TRIMTECH BARBERSHOP</h3>
+        <div className={LandingPageCss['footer-container']}>
+          <div className={LandingPageCss['row']}>
+            <div className={LandingPageCss['col']} id="company">
+              <p>
+                We are specialized in cut hair, make your hairstyle awesome.
+                Try our premium services.
+              </p>
+              <div className={LandingPageCss['social']}>
+                <a href="#"><i className="fab fa-facebook"></i></a>
+                <a href="#"><i className="fab fa-instagram"></i></a>
+                <a href="#"><i className="fab fa-youtube"></i></a>
+                <a href="#"><i className="fab fa-twitter"></i></a>
+                <a href="#"><i className="fab fa-linkedin"></i></a>
+              </div>
+            </div>
+
+            <div className={LandingPageCss['col']} id="useful-links">
+              <h3>Links</h3>
+              <div className={LandingPageCss['links']}>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#kapster">Kapsters</a>
+                <a href="#contact">Contact</a>
+              </div>
+            </div>
+
+            <div className={LandingPageCss['col']} id="contact">
+              <h3>Contact</h3>
+              <div className={LandingPageCss['contact-details']}>
+                <p>Email: trimtech@gmail.com</p>
+              </div>
+              <div className={LandingPageCss['contact-details']}>
+                <p>Phone: +628 1192 3474</p>
+              </div>
+            </div>
+          </div>
+          <div className={LandingPageCss['footer-bottom']}>
+            <p>
+              copyright &copy;2023 TrimtechBarbershop. designed by{' '}
+              <span>TRIMTECHSQUAD</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
       </main>
     </>
   );
 }
+
+
+
+
+
