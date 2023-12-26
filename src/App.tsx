@@ -16,12 +16,14 @@ import { KapsterService } from "./page/admin/kapsterService";
 import AddKapsterService from "./page/admin/kapsterService/add";
 import EditKapsterService from "./page/admin/kapsterService/edit";
 import Appointment from "./page/admin/appointment";
+import UserProfile from "./page/user";
 
 function App() {
   return (
     <Auth>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/user" element={<UserProfile />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />

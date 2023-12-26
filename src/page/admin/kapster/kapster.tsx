@@ -52,7 +52,7 @@ const Actions = ({ status, gender, id, name, specialization }: Kapster) => {
         )
       }
     >
-      <MenuItem value="Available">Avaiable</MenuItem>
+      <MenuItem value="Available">Available</MenuItem>
       <MenuItem value="Not Available">Not Available</MenuItem>
       <MenuItem value="Resigned">Resigned</MenuItem>
     </Select>

@@ -227,6 +227,10 @@ nav a:focus {
   background: rgb(255, 255, 255);
   border-radius: 0.1rem;
   border: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   cursor: pointer;
 }
 
@@ -244,11 +248,13 @@ nav a:focus {
 }
 
 .image-service {
-  display: flex;
-  justify-content: safe;
-  margin-left: 80px;
-  width: 800px;
-  height: 100px;
+  width: 10rem;
+  height: 10rem;
+}
+
+.image-service img {
+  width: 10rem;
+  height: 10rem;
 }
 
 /*Kapster*/
@@ -337,7 +343,7 @@ form {
   border-radius: 8px;
 }
 
-input[type="text"],
+/* input[type="text"],
 input[type="password"],
 input[type="date"],
 input[type="datetime"],
@@ -346,7 +352,9 @@ input[type="search"],
 input[type="tel"],
 input[type="time"],
 textarea,
-select {
+ */
+
+.form-component {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   font-size: 16px;

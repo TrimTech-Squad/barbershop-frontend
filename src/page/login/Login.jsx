@@ -30,7 +30,7 @@ export const Signin = () => {
         severity: "succses",
       });
       if (res.data.role === "Admin") {
-        navigate("/admin/dashboard");
+        navigate("/admin/appointment");
       } else {
         navigate("/");
       }

@@ -75,7 +75,6 @@ form.sign-in-form {
   border-radius: 55px;
   display: grid;
   grid-template-columns: 15% 85%;
-  padding: 0 0.4rem;
   position: relative;
 }
 
@@ -195,15 +194,18 @@ form.sign-in-form {
   margin: 0;
   background: none;
   border: 2px solid #fff;
-  width: 130px;
-  height: 41px;
   font-weight: 600;
   font-size: 0.8rem;
+  padding: 1rem !important;
 }
 
 .right-panel .image,
 .right-panel .content {
   transform: translateX(800px);
+}
+
+input {
+  padding: 0;
 }
 
 /* ANIMATION */

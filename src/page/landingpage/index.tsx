@@ -206,11 +206,9 @@ export default function LandingPage() {
 
   useEffect(() => {
     setKapstersWithSelectedServices([]);
-    for (const kapster of kapsters) {
-      for (const service of kapster.services as Service[]) {
-        if (service.id === Number(serviceSelectedId)) {
-          setKapstersWithSelectedServices((prev) => [...prev, kapster]);
-        }
+    for (const kapster of kapsterServices) {
+      if (kapster.service.id === serviceSelectedId) {
+        setKapstersWithSelectedServices((prev) => [...prev, kapster.kapster]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -312,7 +310,7 @@ export default function LandingPage() {
           >
             {authContext.user ? (
               <>
-                <Avatar src={authContext.user.photo_url} />
+                <Avatar />
                 <Typography fontWeight="bold" onClick={handleClick}>
                   {authContext.user.name}
                 </Typography>
@@ -478,7 +476,7 @@ export default function LandingPage() {
         </div>
 
         {/* Appointment Form */}
-        {authContext.user && (
+        {authContext.user && authContext.user?.role !== "Admin" && (
           <div className={LandingPageCss["appointment"]} id="appointment">
             <div id="body_header">
               <h1>Appointment Request Form</h1>
@@ -503,6 +501,7 @@ export default function LandingPage() {
                   onChange={(_e) =>
                     setServiceSelectedId(parseInt(_e.currentTarget.value ?? 0))
                   }
+                  className={LandingPageCss["form-component"]}
                   value={serviceSelectedId}
                 >
                   {services.map((service) => (
@@ -515,6 +514,7 @@ export default function LandingPage() {
                   Appointment for Kapster*:
                 </label>
                 <select
+                  className={LandingPageCss["form-component"]}
                   required
                   id="kapsterId"
                   onChange={(e) =>
@@ -530,6 +530,8 @@ export default function LandingPage() {
                 </select>
                 <label htmlFor="price">Price</label>
                 <input
+                  className={LandingPageCss["form-component"]}
+                  style={{ padding: "0.5rem 1rem" }}
                   type="text"
                   name="price"
                   required
@@ -539,6 +541,7 @@ export default function LandingPage() {
                 />
                 <label htmlFor="date">Date*:</label>
                 <select
+                  className={LandingPageCss["form-component"]}
                   required
                   value={selectedTime}
                   onChange={(e) =>
@@ -563,9 +566,9 @@ export default function LandingPage() {
                 </select>
 
                 <select
+                  className={LandingPageCss["form-component"]}
                   required
                   name="hour"
-                  className={LandingPageCss["dtt"]}
                   onChange={(e) => setBookingTime(e.currentTarget.value)}
                 >
                   <option>Select Hour</option>
