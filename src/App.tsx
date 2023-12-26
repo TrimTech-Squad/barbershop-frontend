@@ -2,7 +2,6 @@
 import "./App.css";
 import { Signin } from "./page/login/Login";
 import { Route, Routes } from "react-router-dom";
-import { Register } from "./page/register/Register";
 import Auth from "./hooks/auth";
 import AdminLayout from "./layout/admin";
 import Dashboard from "./page/admin/dashboard";
@@ -24,7 +23,6 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signin" element={<Signin />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="add-service" element={<ServiceForm />} />

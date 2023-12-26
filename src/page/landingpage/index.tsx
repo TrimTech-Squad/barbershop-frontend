@@ -1,9 +1,25 @@
 import { Link } from "react-router-dom";
 import LandingPageCss from "./style.module.css";
-import { useState, useEffect, useContext } from "react";
+import {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  FormEventHandler,
+} from "react";
 import fetchApi from "../../helper/fetch";
 import AuthContext from "../../context/auth";
-import { Avatar, Typography } from "@mui/material";
+import {
+  Avatar,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  MenuList,
+  Popover,
+  Typography,
+} from "@mui/material";
+import HistoryIcon from "@mui/icons-material/History";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export type Service = {
   id: number;
@@ -97,24 +113,60 @@ const hours = [
 export default function LandingPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [kapsters, setKapsters] = useState<Kapster[]>([]);
+  const [kapsterServices, setKapsterServices] = useState<
+    { price: number; id: number; service: Service; kapster: Kapster }[]
+  >([]);
 
-  const [serviceSelectedId, setServiceSelectedId] = useState<string>("");
+  const [serviceSelectedId, setServiceSelectedId] = useState<number>(0);
   const [kapsterSelectedId, setKapsterSelectedId] = useState<number>(0);
   const [kapstersWithSelectedServices, setKapstersWithSelectedServices] =
     useState<Kapster[]>([]);
+  const [price, setPrice] = useState<number>(0);
+  const [kapsterSeviceSelectedId, setKapsterSeviceSelectedId] =
+    useState<number>(0);
 
   const [selectedTime, setSelectedTime] = useState<"today" | "tomorrow">(
     "today"
   );
+  const [bookingTime, setBookingTime] = useState<string>("08:00");
 
   const [hoursArr, setHoursArr] = useState(hours);
 
   const authContext = useContext(AuthContext);
 
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const makeReservation: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+
+    try {
+      const date = new Date();
+      selectedTime === "tomorrow" && date.setDate(date.getDate() + 1);
+      date.setHours(Number(bookingTime.split(":")[0]));
+      const response = await fetchApi("/order", "POST", {
+        kapsterServiceId: kapsterSeviceSelectedId,
+        booking_time: date,
+      });
+
+      if (response.code === 201) {
+        alert("Appointment success");
+        open(response.data.redirect_url, "_blank");
+        formRef.current?.reset();
+      } else {
+        alert("Appointment failed");
+      }
+    } catch (e) {
+      alert("Appointment failed");
+    }
+  };
+
   useEffect(() => {
     const date = new Date();
 
-    date.setDate(date.getDate() + (selectedTime === "today" ? 0 : 1));
+    if (selectedTime === "tomorrow") {
+      date.setDate(date.getDate() + 1);
+      date.setHours(0, 0, 0, 0);
+    }
 
     const fetchSchedule = async () => {
       const response = await fetchApi(
@@ -124,8 +176,12 @@ export default function LandingPage() {
 
       setHoursArr(
         hours.map((hour) => {
-          for (const schedule of response.data) {
-            if (schedule.hour === hour.hour) {
+          for (const schedule in response.data) {
+            hour.status = "Available";
+            if (date.getHours() >= Number(hour.hour.split(":")[0])) {
+              hour.status = "Not Available";
+            }
+            if (schedule === hour.hour) {
               hour.status = "Not Available";
             }
           }
@@ -137,6 +193,18 @@ export default function LandingPage() {
   }, [kapsterSelectedId, selectedTime]);
 
   useEffect(() => {
+    const foundKapsterService = kapsterServices.find(
+      (kapsterService) =>
+        kapsterService.kapster.id === kapsterSelectedId &&
+        kapsterService.service.id === serviceSelectedId
+    );
+
+    setPrice(foundKapsterService?.price ?? 0);
+    setKapsterSeviceSelectedId(foundKapsterService?.id ?? 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serviceSelectedId, kapsterSelectedId]);
+
+  useEffect(() => {
     setKapstersWithSelectedServices([]);
     for (const kapster of kapsters) {
       for (const service of kapster.services as Service[]) {
@@ -146,13 +214,13 @@ export default function LandingPage() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kapsters, serviceSelectedId, kapsters]);
+  }, [serviceSelectedId]);
 
   useEffect(() => {
     const fetchServices = async () => {
       const response = await fetchApi("/services", "GET");
       setServices(response.data);
-      setServiceSelectedId(String(response.data[0]?.id ?? 0));
+      setServiceSelectedId(Number(response.data[0]?.id ?? 0));
     };
     fetchServices();
     const fetchKapsters = async () => {
@@ -161,6 +229,11 @@ export default function LandingPage() {
       setKapsterSelectedId(response.data[0]?.id ?? 0);
     };
     fetchKapsters();
+    const fetchKapsterServices = async () => {
+      const response = await fetchApi("/kapster-service", "GET");
+      setKapsterServices(response.data);
+    };
+    fetchKapsterServices();
 
     const date = new Date();
 
@@ -173,6 +246,18 @@ export default function LandingPage() {
       })
     );
   }, []);
+
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const openPopOver = Boolean(anchorEl);
 
   const date = new Date();
 
@@ -208,33 +293,75 @@ export default function LandingPage() {
                 <a href="#kapster">Kapster</a>
               </li>
               <li>
-                <a href="#contact">Contact</a>
+                <a
+                  style={{ marginTop: "1rem" }}
+                  href={authContext.user ? "#appointment" : "/signin"}
+                >
+                  Appointment
+                </a>
               </li>
-              <div
-                style={{
-                  marginLeft: "2rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "1rem",
-                }}
-              >
-                {authContext.user ? (
-                  <>
-                    <Avatar src={authContext.user.photo_url} />
-                    <Typography fontWeight="bold">
-                      {authContext.user.name}
-                    </Typography>
-                  </>
-                ) : (
-                  <Link to="/login" style={{ padding: 0 }}>
-                    <button className={LandingPageCss["button-lgn"]}>
-                      Login
-                    </button>{" "}
-                  </Link>
-                )}
-              </div>
             </ul>
           </nav>
+          <div
+            style={{
+              marginLeft: "2rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            {authContext.user ? (
+              <>
+                <Avatar src={authContext.user.photo_url} />
+                <Typography fontWeight="bold" onClick={handleClick}>
+                  {authContext.user.name}
+                </Typography>
+                <Popover
+                  open={openPopOver}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                >
+                  <MenuList
+                    sx={{
+                      width: "15rem",
+                    }}
+                  >
+                    <Link
+                      style={{ textDecoration: "none", color: "inherit" }}
+                      to="/user"
+                    >
+                      <MenuItem>
+                        <ListItemIcon>
+                          <HistoryIcon />
+                        </ListItemIcon>
+                        <ListItemText>See History Appointment</ListItemText>
+                      </MenuItem>
+                    </Link>
+                    <Link
+                      onClick={() => authContext.logout()}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                      to="/signin"
+                    >
+                      <MenuItem>
+                        <ListItemIcon>
+                          <LogoutIcon />
+                        </ListItemIcon>
+                        <ListItemText>Logout</ListItemText>
+                      </MenuItem>
+                    </Link>
+                  </MenuList>
+                </Popover>
+              </>
+            ) : (
+              <Link to="/signin" style={{ padding: 0 }}>
+                <button className={LandingPageCss["button-lgn"]}>Login</button>{" "}
+              </Link>
+            )}
+          </div>
         </div>
       </header>
       <main>
@@ -244,8 +371,12 @@ export default function LandingPage() {
               <h3>Getting your hair ready</h3>
               <h1>Trimtech Barbershop</h1>
               <hr id="hr-main" />
-              <a href="contact.html" className={LandingPageCss["btn-hire"]}>
-                Appointment
+              <a
+                style={{ marginTop: "1rem" }}
+                href={authContext.user ? "#appointment" : "/signin"}
+                className={LandingPageCss["btn-hire"]}
+              >
+                Make an Appointment
               </a>
             </div>
           </div>
@@ -347,89 +478,117 @@ export default function LandingPage() {
         </div>
 
         {/* Appointment Form */}
-        <div className={LandingPageCss["appointment"]} id="contact">
-          <div id="body_header">
-            <h1>Appointment Request Form</h1>
-            <p>Make your appointments easier</p>
-          </div>
-          <form action="#" method="post">
-            <fieldset>
-              <legend>
-                <span className={LandingPageCss["number"]}>2</span>Appointment
-                Details
-              </legend>
-              <label htmlFor="service">Service</label>
-              <select
-                id="service_id"
-                name="service_id"
-                required
-                onChange={(_e) => setServiceSelectedId(_e.currentTarget.value)}
-              >
-                {services.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.serviceName}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="appointment_for">Appointment for Kapster*:</label>
-              <select
-                id="kapsterId"
-                required
-                onChange={(e) =>
-                  setKapsterSelectedId(parseInt(e.currentTarget.value ?? 0))
-                }
-              >
-                {kapstersWithSelectedServices.map((kapster) => (
-                  <option key={kapster.id} value={kapster.id}>
-                    {kapster.name}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="date">Date*:</label>
-              {/* <input type="date" name="date" required /> */}
-              <select
-                value={selectedTime}
-                onChange={(e) =>
-                  setSelectedTime(e.currentTarget.value as "today" | "tomorrow")
-                }
-              >
-                {!(date.getDay() % 6) ? (
-                  <>
-                    <option value="closed" disabled>
-                      CLossed
+        {authContext.user && (
+          <div className={LandingPageCss["appointment"]} id="appointment">
+            <div id="body_header">
+              <h1>Appointment Request Form</h1>
+              <p>Make your appointments easier</p>
+            </div>
+            <form
+              action="#"
+              method="post"
+              onSubmit={makeReservation}
+              ref={formRef}
+            >
+              <fieldset>
+                <legend>
+                  <span className={LandingPageCss["number"]}>2</span>Appointment
+                  Details
+                </legend>
+                <label htmlFor="service">Service</label>
+                <select
+                  id="service_id"
+                  name="service_id"
+                  required
+                  onChange={(_e) =>
+                    setServiceSelectedId(parseInt(_e.currentTarget.value ?? 0))
+                  }
+                  value={serviceSelectedId}
+                >
+                  {services.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.serviceName}
                     </option>
-                  </>
-                ) : (
-                  <>
-                    <option value="today">Today</option>
-                    {date.setDate(date.getDate() + 1)}
-                    {date.getDay() % 6 && (
-                      <option value="tomorrow">Tomorrow</option>
-                    )}
-                  </>
-                )}
-              </select>
+                  ))}
+                </select>
+                <label htmlFor="appointment_for">
+                  Appointment for Kapster*:
+                </label>
+                <select
+                  required
+                  id="kapsterId"
+                  onChange={(e) =>
+                    setKapsterSelectedId(parseInt(e.currentTarget.value ?? 0))
+                  }
+                  value={kapsterSelectedId}
+                >
+                  {kapstersWithSelectedServices.map((kapster) => (
+                    <option key={kapster.id} value={kapster.id}>
+                      {kapster.name}
+                    </option>
+                  ))}
+                </select>
+                <label htmlFor="price">Price</label>
+                <input
+                  type="text"
+                  name="price"
+                  required
+                  placeholder="Rp."
+                  value={"Rp. " + price}
+                  disabled
+                />
+                <label htmlFor="date">Date*:</label>
+                <select
+                  required
+                  value={selectedTime}
+                  onChange={(e) =>
+                    setSelectedTime(
+                      e.currentTarget.value as "today" | "tomorrow"
+                    )
+                  }
+                >
+                  {!(date.getDay() % 6) ? (
+                    <>
+                      <option disabled>CLossed</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="today">Today</option>
+                      {date.setDate(date.getDate() + 1)}
+                      {date.getDay() % 6 && (
+                        <option value="tomorrow">Tomorrow</option>
+                      )}
+                    </>
+                  )}
+                </select>
 
-              <select name="" id="" className={LandingPageCss["dtt"]}>
-                {hoursArr.map((hour) => (
-                  <option
-                    disabled={hour.status === "Available" ? false : true}
-                    key={hour.hour}
-                    value={hour.hour}
-                    style={
-                      hour.status === "Available"
-                        ? { color: "black" }
-                        : { color: "red" }
-                    }
-                  >
-                    {hour.hour}
-                  </option>
-                ))}
-              </select>
-            </fieldset>
-            <button type="submit">Request For Appointment</button>
-          </form>
-        </div>
+                <select
+                  required
+                  name="hour"
+                  className={LandingPageCss["dtt"]}
+                  onChange={(e) => setBookingTime(e.currentTarget.value)}
+                >
+                  <option>Select Hour</option>
+                  {hoursArr.map((hour) => (
+                    <option
+                      disabled={hour.status === "Available" ? false : true}
+                      key={hour.hour}
+                      value={hour.hour}
+                      style={
+                        hour.status === "Available"
+                          ? { color: "black" }
+                          : { color: "red" }
+                      }
+                    >
+                      {hour.hour}
+                    </option>
+                  ))}
+                </select>
+              </fieldset>
+              <button type="submit">Request For Appointment</button>
+            </form>
+          </div>
+        )}
 
         <footer>
           {/* Footer section */}
