@@ -33,7 +33,7 @@ const Actions = ({ status, gender, id, name, specialization }: Kapster) => {
         status: statusKapster,
       });
     } catch (error) {
-      console.error("Error fetching data:", error);
+      alert("Error changing status");
     }
   };
 
@@ -143,7 +143,7 @@ export const Kapster = () => {
         setRows(response.data);
         setPresistenRows(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        alert("Error fetching kapsters");
       }
     };
 

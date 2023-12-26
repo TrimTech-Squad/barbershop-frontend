@@ -34,7 +34,7 @@ const EditKapsterService = () => {
 
       navigate("/admin/kapsterservice");
     } catch (error) {
-      console.error("Error fetching data:", error);
+      alert("Error creating service");
     }
   };
 

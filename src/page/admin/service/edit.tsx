@@ -44,7 +44,7 @@ const EditService = () => {
       });
       navigate("/admin/services");
     } catch (error) {
-      console.error("Error fetching data:", error);
+    alert("Error updating service");
     }
   };
 

@@ -194,6 +194,7 @@ export default function LandingPage() {
       );
     };
     fetchSchedule();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTime, kapsterSelectedId, selectedTime]);
 
   useEffect(() => {
@@ -395,16 +396,22 @@ export default function LandingPage() {
           </div>
 
           <div className={LandingPageCss["about-text"]}>
-            <h2>About Us</h2>
+            <h1>About Us</h1>
             <p>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse
-              placeat minus molestias alias eveniet est voluptatem a dolorem
-              accusamus asperiores tempora, voluptates aperiam doloribus
-              reprehenderit sunt officiis ipsa? Ducimus, repudiandae Lorem ipsum
-              dolor sit amet consectetur adipisicing elit. Repudiandae dolorem
-              culpa distinctio excepturi animi. Corrupti rerum aliquid unde?
-              Iusto ex dolorem non aliquid voluptatibus distinctio, fugiat odit
-              dicta excepturi dolor?
+              Tucked away on a sunny corner, our barber shop isn't just about
+              haircuts. It's a friendly haven where stories are swapped,
+              laughter cracks like lightning, and good vibes buzz with the
+              clippers. Forget fancy salons – we're all about genuine smiles and
+              down-to-earth style. Our barbers are the real magic. They're more
+              than just scissor slingers, they're confidantes, listeners, and
+              maybe even unofficial therapists. They'll sculpt your mane into a
+              masterpiece and leave you feeling confident enough to own the
+              streets. They know your name, your favorite cut, and probably the
+              name of your pet goldfish. So, skip the sterile salons and come on
+              down. Grab a seat, share a laugh, and let us shape not just your
+              hair, but your experience. We're more than a barber shop – we're
+              family. (Just don't mention the goldfish in front of Mr. Johnson,
+              he still thinks it's a lamp.)
             </p>
             {/* <a
               href="#"
@@ -422,7 +429,7 @@ export default function LandingPage() {
         >
           <div className={LandingPageCss["text-center"]}>
             <h2>OUR BEST SERVICES THAT WE OFFERING TO YOU</h2>
-            <h4>Our Service</h4>
+            <h4>Our Services</h4>
           </div>
 
           <div className={LandingPageCss["service-item"]}>

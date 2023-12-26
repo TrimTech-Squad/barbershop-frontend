@@ -64,7 +64,7 @@ const KapsterEditForm = () => {
 
       navigate("/admin/kapsters");
     } catch (error) {
-      console.error("Error adding kapster:", error);
+      alert("Error updating kapster");
     }
   };
 

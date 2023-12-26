@@ -18,7 +18,7 @@ const Auth = ({ children }: { children: ReactNode }) => {
 
       setUser(fetchedUser);
     } catch (err) {
-      console.log(err);
+      alert("Login failed");
     }
   };
 
@@ -37,7 +37,7 @@ const Auth = ({ children }: { children: ReactNode }) => {
         const fetchedUser = { ...JSON.parse(userStorage), ...res.data };
         setUser(fetchedUser);
       } catch (err) {
-        console.log(err);
+        alert("Login failed");
       }
     })();
   }, []);

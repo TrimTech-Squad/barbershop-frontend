@@ -28,7 +28,7 @@ const Actions = ({ id, price, isActive }: KapsterService) => {
         isActive: isActiveService,
       });
     } catch (error) {
-      console.error("Error fetching data:", error);
+      alert("Error changing status");
     }
   };
 
@@ -85,7 +85,7 @@ const ServiceColumns: GridColDef[] = [
     headerName: "Actions",
     width: 150,
     renderCell: ({ row }) => {
-      console.log(row);
+     
       return (
         <Link
           to={`/admin/kapsterservice/edit?id=${row.id}&isActive=${row.isActive}&price=${row.price}`}

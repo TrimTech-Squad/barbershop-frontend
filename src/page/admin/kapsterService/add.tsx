@@ -34,7 +34,7 @@ const AddKapsterService = () => {
 
       navigate("/admin/kapsterservice");
     } catch (error) {
-      console.error("Error fetching data:", error);
+      alert("Error creating service");
     }
   };
 
@@ -47,7 +47,7 @@ const AddKapsterService = () => {
         const services = await fetchApi("/services", "GET");
         setServices(services.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        alert("Error fetching kapsters");
       }
     };
     fetchKapsters();
