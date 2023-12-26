@@ -13,6 +13,7 @@ export type Service = {
 };
 
 export type Kapster = {
+  [x: string]: unknown;
   id: number;
   name: string;
   specialization: string;
@@ -21,24 +22,159 @@ export type Kapster = {
   status: "Available" | "Not Available" | "Resigned";
 };
 
+const hours = [
+  {
+    hour: "08:00",
+    status: "Available",
+  },
+
+  {
+    hour: "08:30",
+    status: "Available",
+  },
+  {
+    hour: "09:00",
+    status: "Available",
+  },
+  {
+    hour: "09:30",
+    status: "Available",
+  },
+  {
+    hour: "10:00",
+    status: "Available",
+  },
+  {
+    hour: "10:30",
+    status: "Available",
+  },
+  {
+    hour: "11:00",
+    status: "Available",
+  },
+  {
+    hour: "11:30",
+    status: "Available",
+  },
+  {
+    hour: "13:00",
+    status: "Available",
+  },
+  {
+    hour: "13:30",
+    status: "Available",
+  },
+  {
+    hour: "14:00",
+    status: "Available",
+  },
+  {
+    hour: "14:30",
+    status: "Available",
+  },
+  {
+    hour: "15:00",
+    status: "Available",
+  },
+  {
+    hour: "15:30",
+    status: "Available",
+  },
+  {
+    hour: "16:00",
+    status: "Available",
+  },
+  {
+    hour: "16:30",
+    status: "Available",
+  },
+  {
+    hour: "18:30",
+    status: "Available",
+  },
+];
+
 export default function LandingPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [kapsters, setKapsters] = useState<Kapster[]>([]);
 
+  const [serviceSelectedId, setServiceSelectedId] = useState<string>("");
+  const [kapsterSelectedId, setKapsterSelectedId] = useState<number>(0);
+  const [kapstersWithSelectedServices, setKapstersWithSelectedServices] =
+    useState<Kapster[]>([]);
+
+  const [selectedTime, setSelectedTime] = useState<"today" | "tomorrow">(
+    "today"
+  );
+
+  const [hoursArr, setHoursArr] = useState(hours);
+
   const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    const date = new Date();
+
+    date.setDate(date.getDate() + (selectedTime === "today" ? 0 : 1));
+
+    const fetchSchedule = async () => {
+      const response = await fetchApi(
+        `/kapsters/${kapsterSelectedId}/schedules?date=${date.toISOString()}`,
+        "GET"
+      );
+
+      setHoursArr(
+        hours.map((hour) => {
+          for (const schedule of response.data) {
+            if (schedule.hour === hour.hour) {
+              hour.status = "Not Available";
+            }
+          }
+          return hour;
+        })
+      );
+    };
+    fetchSchedule();
+  }, [kapsterSelectedId, selectedTime]);
+
+  useEffect(() => {
+    setKapstersWithSelectedServices([]);
+    for (const kapster of kapsters) {
+      for (const service of kapster.services as Service[]) {
+        if (service.id === Number(serviceSelectedId)) {
+          setKapstersWithSelectedServices((prev) => [...prev, kapster]);
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kapsters, serviceSelectedId, kapsters]);
 
   useEffect(() => {
     const fetchServices = async () => {
       const response = await fetchApi("/services", "GET");
       setServices(response.data);
+      setServiceSelectedId(String(response.data[0]?.id ?? 0));
     };
     fetchServices();
     const fetchKapsters = async () => {
       const response = await fetchApi("/kapsters", "GET");
       setKapsters(response.data);
+      setKapsterSelectedId(response.data[0]?.id ?? 0);
     };
     fetchKapsters();
+
+    const date = new Date();
+
+    setHoursArr(
+      hours.map((hour) => {
+        if (date.getHours() >= Number(hour.hour.split(":")[0])) {
+          hour.status = "Not Available";
+        }
+        return hour;
+      })
+    );
   }, []);
+
+  const date = new Date();
 
   return (
     <>
@@ -125,7 +261,7 @@ export default function LandingPage() {
           </div>
 
           <div className={LandingPageCss["about-text"]}>
-            <h2>About Me</h2>
+            <h2>About Us</h2>
             <p>
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse
               placeat minus molestias alias eveniet est voluptatem a dolorem
@@ -136,12 +272,12 @@ export default function LandingPage() {
               Iusto ex dolorem non aliquid voluptatibus distinctio, fugiat odit
               dicta excepturi dolor?
             </p>
-            <a
+            {/* <a
               href="#"
               className={`${LandingPageCss["button"]} ${LandingPageCss["btn-about"]} `}
             >
               BOOKING NOW
-            </a>
+            </a> */}
           </div>
         </div>
 
@@ -211,7 +347,7 @@ export default function LandingPage() {
         </div>
 
         {/* Appointment Form */}
-        <div className={LandingPageCss['appointment']} id="contact">
+        <div className={LandingPageCss["appointment"]} id="contact">
           <div id="body_header">
             <h1>Appointment Request Form</h1>
             <p>Make your appointments easier</p>
@@ -219,95 +355,142 @@ export default function LandingPage() {
           <form action="#" method="post">
             <fieldset>
               <legend>
-                <span className={LandingPageCss['number']}>1</span>Your basic details
+                <span className={LandingPageCss["number"]}>2</span>Appointment
+                Details
               </legend>
-              <label htmlFor="name">Name*:</label>
-              <input type="text" id="name" name="user_name" placeholder="trimtech" required pattern="[a-zA-Z0-9]+" />
-
-              <label htmlFor="mail">Email*:</label>
-              <input type="email" id="mail" name="user_email" placeholder="trimtech@gmail.com" required />
-            </fieldset>
-
-            <fieldset>
-              <legend>
-                <span className={LandingPageCss['number']}>2</span>Appointment Details
-              </legend>
-              <label htmlFor="appointment_for">Appointment for Kapster*:</label>
-              <select id="appointment_for" name="appointment_for" required>
-                <option value="clarissa">Clarissa</option>
-                <option value="joe">Joe </option>
-                <option value="luke">Luke</option>
-              </select>
               <label htmlFor="service">Service</label>
-              <select id="service_id" name="service_id" required>
-                <option value="haircut">Haircut</option>
-                <option value="massage">Massage </option>
-                <option value="razorcut">Razor Cut</option>
-                <option value="hairstyle">Hair Style</option>
+              <select
+                id="service_id"
+                name="service_id"
+                required
+                onChange={(_e) => setServiceSelectedId(_e.currentTarget.value)}
+              >
+                {services.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.serviceName}
+                  </option>
+                ))}
+              </select>
+              <label htmlFor="appointment_for">Appointment for Kapster*:</label>
+              <select
+                id="kapsterId"
+                required
+                onChange={(e) =>
+                  setKapsterSelectedId(parseInt(e.currentTarget.value ?? 0))
+                }
+              >
+                {kapstersWithSelectedServices.map((kapster) => (
+                  <option key={kapster.id} value={kapster.id}>
+                    {kapster.name}
+                  </option>
+                ))}
               </select>
               <label htmlFor="date">Date*:</label>
-              <input type="date" name="date" value="" required />
-              <input type="time" id="time" name="utime" min="8:00" max="20:00" value="8:00" className={LandingPageCss['dtt']} required />
+              {/* <input type="date" name="date" required /> */}
+              <select
+                value={selectedTime}
+                onChange={(e) =>
+                  setSelectedTime(e.currentTarget.value as "today" | "tomorrow")
+                }
+              >
+                {!(date.getDay() % 6) ? (
+                  <>
+                    <option value="closed" disabled>
+                      CLossed
+                    </option>
+                  </>
+                ) : (
+                  <>
+                    <option value="today">Today</option>
+                    {date.setDate(date.getDate() + 1)}
+                    {date.getDay() % 6 && (
+                      <option value="tomorrow">Tomorrow</option>
+                    )}
+                  </>
+                )}
+              </select>
+
+              <select name="" id="" className={LandingPageCss["dtt"]}>
+                {hoursArr.map((hour) => (
+                  <option
+                    disabled={hour.status === "Available" ? false : true}
+                    key={hour.hour}
+                    value={hour.hour}
+                    style={
+                      hour.status === "Available"
+                        ? { color: "black" }
+                        : { color: "red" }
+                    }
+                  >
+                    {hour.hour}
+                  </option>
+                ))}
+              </select>
             </fieldset>
             <button type="submit">Request For Appointment</button>
           </form>
         </div>
 
         <footer>
-      {/* Footer section */}
-      <div className={LandingPageCss['footer']}>
-        <h3>TRIMTECH BARBERSHOP</h3>
-        <div className={LandingPageCss['footer-container']}>
-          <div className={LandingPageCss['row']}>
-            <div className={LandingPageCss['col']} id="company">
-              <p>
-                We are specialized in cut hair, make your hairstyle awesome.
-                Try our premium services.
-              </p>
-              <div className={LandingPageCss['social']}>
-                <a href="#"><i className="fab fa-facebook"></i></a>
-                <a href="#"><i className="fab fa-instagram"></i></a>
-                <a href="#"><i className="fab fa-youtube"></i></a>
-                <a href="#"><i className="fab fa-twitter"></i></a>
-                <a href="#"><i className="fab fa-linkedin"></i></a>
-              </div>
-            </div>
+          {/* Footer section */}
+          <div className={LandingPageCss["footer"]}>
+            <h3>TRIMTECH BARBERSHOP</h3>
+            <div className={LandingPageCss["footer-container"]}>
+              <div className={LandingPageCss["row"]}>
+                <div className={LandingPageCss["col"]} id="company">
+                  <p>
+                    We are specialized in cut hair, make your hairstyle awesome.
+                    Try our premium services.
+                  </p>
+                  <div className={LandingPageCss["social"]}>
+                    <a href="#">
+                      <i className="fab fa-facebook"></i>
+                    </a>
+                    <a href="#">
+                      <i className="fab fa-instagram"></i>
+                    </a>
+                    <a href="#">
+                      <i className="fab fa-youtube"></i>
+                    </a>
+                    <a href="#">
+                      <i className="fab fa-twitter"></i>
+                    </a>
+                    <a href="#">
+                      <i className="fab fa-linkedin"></i>
+                    </a>
+                  </div>
+                </div>
 
-            <div className={LandingPageCss['col']} id="useful-links">
-              <h3>Links</h3>
-              <div className={LandingPageCss['links']}>
-                <a href="#about">About</a>
-                <a href="#services">Services</a>
-                <a href="#kapster">Kapsters</a>
-                <a href="#contact">Contact</a>
-              </div>
-            </div>
+                <div className={LandingPageCss["col"]} id="useful-links">
+                  <h3>Links</h3>
+                  <div className={LandingPageCss["links"]}>
+                    <a href="#about">About</a>
+                    <a href="#services">Services</a>
+                    <a href="#kapster">Kapsters</a>
+                    <a href="#contact">Contact</a>
+                  </div>
+                </div>
 
-            <div className={LandingPageCss['col']} id="contact">
-              <h3>Contact</h3>
-              <div className={LandingPageCss['contact-details']}>
-                <p>Email: trimtech@gmail.com</p>
+                <div className={LandingPageCss["col"]} id="contact">
+                  <h3>Contact</h3>
+                  <div className={LandingPageCss["contact-details"]}>
+                    <p>Email: trimtech@gmail.com</p>
+                  </div>
+                  <div className={LandingPageCss["contact-details"]}>
+                    <p>Phone: +628 1192 3474</p>
+                  </div>
+                </div>
               </div>
-              <div className={LandingPageCss['contact-details']}>
-                <p>Phone: +628 1192 3474</p>
+              <div className={LandingPageCss["footer-bottom"]}>
+                <p>
+                  copyright &copy;2023 TrimtechBarbershop. designed by{" "}
+                  <span>TRIMTECHSQUAD</span>
+                </p>
               </div>
             </div>
           </div>
-          <div className={LandingPageCss['footer-bottom']}>
-            <p>
-              copyright &copy;2023 TrimtechBarbershop. designed by{' '}
-              <span>TRIMTECHSQUAD</span>
-            </p>
-          </div>
-        </div>
-      </div>
-    </footer>
+        </footer>
       </main>
     </>
   );
 }
-
-
-
-
-
