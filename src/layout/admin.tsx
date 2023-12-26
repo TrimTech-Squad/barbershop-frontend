@@ -1,16 +1,15 @@
-import { People, Search } from "@mui/icons-material";
+import { People } from "@mui/icons-material";
 import {
   Avatar,
   Box,
   Divider,
   Drawer,
-  InputAdornment,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  OutlinedInput,
   Stack,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
@@ -26,7 +25,7 @@ const AdminLayout = () => {
     if (!isAuthorized) {
       navigate("/signin");
     }
-  }, [isAuthorized]);
+  }, [isAuthorized, navigate]);
 
   return (
     <Stack direction="row" width="100%">
@@ -126,14 +125,14 @@ export const Navbar = () => {
         padding="1rem"
         boxSizing={"border-box"}
       >
-        <OutlinedInput
-          startAdornment={
-            <InputAdornment position="start">
-              <Search />
-            </InputAdornment>
-          }
-          label="Search"
-        />
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1 }}
+          fontWeight={600}
+        >
+          Admin Panel
+        </Typography>
         <Stack direction="row" spacing={2}>
           <Avatar />
         </Stack>

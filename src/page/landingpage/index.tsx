@@ -43,7 +43,6 @@ const hours = [
     hour: "08:00",
     status: "Available",
   },
-
   {
     hour: "08:30",
     status: "Available",
@@ -113,6 +112,7 @@ const hours = [
 export default function LandingPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [kapsters, setKapsters] = useState<Kapster[]>([]);
+
   const [kapsterServices, setKapsterServices] = useState<
     { price: number; id: number; service: Service; kapster: Kapster }[]
   >([]);
@@ -165,8 +165,12 @@ export default function LandingPage() {
 
     if (selectedTime === "tomorrow") {
       date.setDate(date.getDate() + 1);
-      date.setHours(0, 0, 0, 0);
     }
+
+    const hour = bookingTime.split(":")[0];
+    date.setHours(Number(hour));
+    const minutes = bookingTime.split(":")[1];
+    date.setMinutes(Number(minutes));
 
     const fetchSchedule = async () => {
       const response = await fetchApi(
@@ -176,12 +180,12 @@ export default function LandingPage() {
 
       setHoursArr(
         hours.map((hour) => {
+          hour.status = "Available";
           for (const schedule in response.data) {
-            hour.status = "Available";
-            if (date.getHours() >= Number(hour.hour.split(":")[0])) {
+            if (hour.hour === schedule) {
               hour.status = "Not Available";
             }
-            if (schedule === hour.hour) {
+            if (date.getHours() >= Number(hour.hour.split(":")[0])) {
               hour.status = "Not Available";
             }
           }
@@ -190,7 +194,7 @@ export default function LandingPage() {
       );
     };
     fetchSchedule();
-  }, [kapsterSelectedId, selectedTime]);
+  }, [selectedTime, kapsterSelectedId, selectedTime]);
 
   useEffect(() => {
     const foundKapsterService = kapsterServices.find(
@@ -209,6 +213,7 @@ export default function LandingPage() {
     for (const kapster of kapsterServices) {
       if (kapster.service.id === serviceSelectedId) {
         setKapstersWithSelectedServices((prev) => [...prev, kapster.kapster]);
+        setKapsterSelectedId(kapster.kapster.id);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -571,7 +576,9 @@ export default function LandingPage() {
                   name="hour"
                   onChange={(e) => setBookingTime(e.currentTarget.value)}
                 >
-                  <option>Select Hour</option>
+                  <option value="" selected disabled hidden>
+                    Select Hour
+                  </option>
                   {hoursArr.map((hour) => (
                     <option
                       disabled={hour.status === "Available" ? false : true}

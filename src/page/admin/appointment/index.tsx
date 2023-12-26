@@ -40,14 +40,13 @@ const ServiceColumns: GridColDef[] = [
     headerName: "Status",
     width: 200,
     renderCell: (params) => {
-      console.log(params.value);
       if (params.value === "Booked")
         return (
           <Button color="info" variant="outlined">
             {params.value}
           </Button>
         );
-      if (params.value === "Canceled")
+      if (params.value === "Cancelled")
         return (
           <Button color="error" variant="outlined">
             {params.value}
@@ -175,7 +174,7 @@ const Appointment = () => {
         spacing={2}
         sx={{ marginTop: 2 }}
       >
-        <OutlinedInput 
+        <OutlinedInput
           startAdornment={
             <InputAdornment position="start">
               <SearchIcon />
@@ -186,7 +185,6 @@ const Appointment = () => {
           placeholder="Search KapsterService"
           sx={{ width: "20rem" }}
           size="small"
-        
         />
       </Stack>
       <DataGrid
