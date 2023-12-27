@@ -139,7 +139,7 @@ export const Kapster = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchApi("/kapsters?all=true", "GET");
+        const response = await fetchApi("/kapsters/all", "GET");
         setRows(response.data);
         setPresistenRows(response.data);
       } catch (error) {

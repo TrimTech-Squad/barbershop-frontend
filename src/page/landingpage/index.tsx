@@ -643,7 +643,7 @@ export default function LandingPage() {
                     <a href="#about">About</a>
                     <a href="#services">Services</a>
                     <a href="#kapster">Kapsters</a>
-                    <a href="#contact">Contact</a>
+                    <a href="#appointment">Appointment</a>
                   </div>
                 </div>
 

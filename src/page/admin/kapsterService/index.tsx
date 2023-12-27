@@ -85,7 +85,6 @@ const ServiceColumns: GridColDef[] = [
     headerName: "Actions",
     width: 150,
     renderCell: ({ row }) => {
-     
       return (
         <Link
           to={`/admin/kapsterservice/edit?id=${row.id}&isActive=${row.isActive}&price=${row.price}`}
@@ -136,7 +135,7 @@ export const KapsterService = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await fetchApi("/kapster-service", "GET");
+      const res = await fetchApi("/kapster-service?all=true", "GET");
 
       const reshapedData = res.data.map((data: KapsterServiceFetch) => {
         const { service, kapster, ...rest } = data;

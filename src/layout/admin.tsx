@@ -33,7 +33,10 @@ const AdminLayout = () => {
       <Box width="100%">
         <Navbar />
         <Box padding="1rem">
-          <Stack spacing={2}>
+          <Stack
+            spacing={2}
+            sx={{ overflowX: "auto", width: "calc(100vw - 18rem)" }}
+          >
             <Outlet />
           </Stack>
         </Box>
